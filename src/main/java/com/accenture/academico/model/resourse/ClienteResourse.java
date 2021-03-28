@@ -1,18 +1,32 @@
 package com.accenture.academico.model.resourse;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.accenture.academico.model.entities.Cliente;
+import com.accenture.academico.model.services.ClienteService;
 
 @RestController
-@RequestMapping(value= "/clientes")
+@RequestMapping(value = "/clientes")
 public class ClienteResourse {
+	
+	@Autowired
+	private ClienteService service;
+
 	@GetMapping
-	public ResponseEntity<Cliente> findAll(){
-		Cliente cliente = new Cliente(1L, "Diogo","999.999.999-99" , "81999999999");
-		//User u = new User(1, "", "", "", "");
-		return ResponseEntity.ok().body(cliente);
+	public ResponseEntity<List<Cliente>> findAll() {
+		List<Cliente> list = service.findAll();
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<Cliente> findById(@PathVariable Long id) {
+		Cliente obj = service.findById(id);
+		return ResponseEntity.ok().body(obj);
 	}
 }
